@@ -1,37 +1,45 @@
-QUIZMEL - app instalable (PWA) - GUIA RAPIDA
-=============================================
-Esta carpeta es la app completa. Para que funcione como Mama Ball (instalable y SIN cuenta de Claude)
-necesita 2 cosas gratis: una base de datos (Firebase) y un lugar donde publicarla (hosting).
-Todo se hace desde el navegador, sin instalar programas.
+QUIZMEL - app instalable (PWA) - GUIA RAPIDA: FIREBASE + GITHUB + VERCEL
+=========================================================================
+Es una pagina estatica (sin build): index.html, config.js, sw.js, manifest, iconos y vercel.json.
+Vercel la publica directo desde tu repositorio de GitHub, y cada cambio que hagas en GitHub se publica solo.
 
 PASO 1 - Base de datos gratis (Firebase)
-1. Entra a console.firebase.google.com con tu cuenta de Google > "Crear un proyecto" (nombre: quizmel; puedes desactivar Analytics).
+1. console.firebase.google.com > "Crear un proyecto" (nombre: quizmel; puedes desactivar Analytics).
 2. En el proyecto pulsa el icono web </> ("Agregar app"), ponle un nombre y registra la app.
-   Te muestra un bloque llamado firebaseConfig: son 6 valores.
-3. Abre el archivo config.js con el Bloc de notas y reemplaza cada PEGA_AQUI por su valor (entre comillas). Guarda.
-4. Compilacion > Authentication > "Comenzar" > pestana "Metodo de acceso": activa "Anonimo" y "Correo electronico/contrasena".
-   Pestana "Usuarios" > "Agregar usuario": escribe TU correo y una contrasena. Ese sera tu acceso de CREADOR.
-5. Compilacion > Firestore Database > "Crear base de datos" > elige una ubicacion > modo produccion.
-6. En Firestore, pestana "Reglas": borra todo y pega el contenido del archivo firestore.rules,
-   cambiando CREADOR@CORREO.COM por tu correo. Pulsa "Publicar".
+   Te muestra firebaseConfig: son 6 valores.
+3. Compilacion > Authentication > "Comenzar" > "Metodo de acceso": activa "Anonimo" y "Correo electronico/contrasena".
+   Pestana "Usuarios" > "Agregar usuario": TU correo y una contrasena (sera tu acceso de CREADOR).
+4. Compilacion > Firestore Database > "Crear base de datos" > una ubicacion > modo produccion.
+5. Firestore > pestana "Reglas": borra todo y pega firestore.rules, cambiando CREADOR@CORREO.COM por tu correo. "Publicar".
 
-PASO 2 - Publicar la app (gratis)
-Opcion facil: Netlify. Entra a app.netlify.com/drop y arrastra esta carpeta (descomprimida).
-Crea una cuenta gratis para que no se borre. Te da una direccion https://algo.netlify.app
-(Tambien sirven GitHub Pages o Cloudflare Pages.)
-Si al abrirla sale error de dominio: Firebase > Authentication > Configuracion > Dominios autorizados > agrega tu direccion.
+PASO 2 - Subir a GitHub
+1. github.com > "New repository" (nombre: quizmel). Puede ser privado.
+2. "Add file" > "Upload files": sube TODOS los archivos de esta carpeta (no el .zip): index.html, config.js, sw.js,
+   manifest.webmanifest, icon-192.png, icon-512.png, icon-maskable-512.png, vercel.json, firestore.rules y LEEME.txt. "Commit changes".
+3. Abre config.js en GitHub > icono del lapiz > reemplaza cada PEGA_AQUI por los valores de firebaseConfig > "Commit changes".
+   (Esos valores son publicos por diseno; lo que protege tus datos son las reglas del paso 1.5.)
 
-PASO 3 - Instalar
-- Celular Android (Chrome): menu de los 3 puntos > "Instalar app" o "Anadir a pantalla de inicio".
+PASO 3 - Publicar en Vercel
+1. vercel.com > "Add New..." > "Project" > importa el repositorio quizmel de GitHub.
+2. Framework Preset: "Other". Deja vacios Build Command y Output Directory. Pulsa "Deploy".
+3. Te da una direccion tipo quizmel.vercel.app.
+4. Si al abrirla sale error de dominio: Firebase > Authentication > Configuracion > Dominios autorizados > agrega esa direccion.
+
+PASO 4 - Instalar (como Mama Ball / Mefdim Cuentas)
+- Celular Android (Chrome): menu de 3 puntos > "Instalar app" o "Anadir a pantalla de inicio".
 - Computador (Chrome): icono de instalar en la barra de direcciones, o menu > "Transmitir, guardar y compartir" >
   "Instalar pagina como aplicacion" / "Crear acceso directo".
-- Tus jugadores NO necesitan cuenta: abren la direccion, escriben su nombre e instalan igual.
+- Los jugadores NO necesitan cuenta: abren tu direccion, escriben su nombre y juegan.
+
+COMO MODIFICAR LA APP DESPUES
+Entra a tu repositorio en GitHub > abre index.html > lapiz > cambia > "Commit changes". Vercel publica en ~1 minuto.
+Si algo no se actualiza en el celular, cierra la app y vuelvela a abrir.
 
 COMO ENTRAR COMO CREADOR
-En la pantalla de inicio, abajo, toca "Soy el creador" y pon el correo y la contrasena del paso 1.4.
-Con eso puedes crear quizzes y ver resultados. Los jugadores solo ven los quizzes publicados.
+En la pantalla de inicio, abajo, toca "Soy el creador" y pon el correo y la contrasena del paso 1.3.
+Con eso creas quizzes y ves resultados. Los jugadores solo ven los quizzes publicados.
 
 NOTAS
 - El plan gratis de Firebase alcanza de sobra para quizzes y torneos pequenos o medianos.
 - Las respuestas correctas viajan dentro de la app: alguien con conocimientos tecnicos podria hacer trampa.
-- Los quizzes que hiciste en la version de Claude no se copian; hay que crearlos de nuevo.
+- Los quizzes de la version de Claude no se copian; hay que crearlos de nuevo.
