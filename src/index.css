@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0b193c;
+  --color-secondary: #775a19;
+  --color-secondary-fixed: #ffdea5;
+  --color-surface: #f8f9fa;
+  --color-on-surface: #191c1d;
+  --color-on-primary: #ffffff;
+  
+  --font-manrope: "Manrope", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-inter bg-surface text-on-surface;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* Tema oscuro */
+.dark {
+  --color-primary: #a8c4ff;
+  --color-secondary: #f0c060;
+  --color-secondary-fixed: #3a2e00;
+  --color-surface: #111827;
+  --color-on-surface: #e5e7eb;
+  --color-on-primary: #0b193c;
+}
+
+.dark body {
+  @apply bg-surface text-on-surface;
+}
