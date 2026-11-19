@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // CAMBIA el correo por el tuyo (el mismo que usarás para entrar como creador)
+    function creador() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "password"
+        && request.auth.token.email == "CREADOR@CORREO.COM";
+    }
+    match /quizzes/{id} {
+      allow read: if request.auth != null;
+      allow write: if creador();
+    }
+    match /answers/{uid} {
+      allow read: if creador() || (request.auth != null && request.auth.uid == uid);
+      allow write: if creador() || (request.auth != null && request.auth.uid == uid);
+    }
+    match /board/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}
