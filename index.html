@@ -1,13 +1,313 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QUIZMEL</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1d1d1b;--mu:#6b6a64;--ac:#4f46e5;--ok:#16a34a;--bad:#dc2626;--bd:#dedcd3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151517;--card:#202024;--tx:#f2f1ee;--mu:#9a99a3;--ac:#818cf8;--ok:#4ade80;--bad:#f87171;--bd:#34343b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151517;--card:#202024;--tx:#f2f1ee;--mu:#9a99a3;--ac:#818cf8;--ok:#4ade80;--bad:#f87171;--bd:#34343b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:680px;margin:0 auto;padding:16px}
+h1{font-size:22px}h2{font-size:17px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
+.mu{color:var(--mu);font-size:14px}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:10px 14px}
+button.p{background:var(--ac);border-color:var(--ac);color:#fff}
+button.sm{padding:4px 10px;font-size:14px}
+button:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=number],input[type=password]{font:inherit;padding:10px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+input[type=text],input[type=password]{width:100%;margin-bottom:8px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.logo{font-size:44px;font-weight:800;letter-spacing:3px;color:var(--ac);text-align:center}
+.logo.s{font-size:28px;margin:6px 0 14px}
+#sp{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tb{padding:16px 8px;font-size:16px}
+.opt{display:block;width:100%;text-align:left;margin-bottom:8px;padding:14px;font-size:17px}
+.opt.sel{border-color:var(--ac);outline:2px solid var(--ac)}
+.q{padding:8px 0;border-top:1px solid var(--bd);display:flex;justify-content:space-between;gap:8px}
+.big{font-size:20px;font-weight:600;margin:6px 0 14px}
+.tm{color:var(--ac)}
+.or{display:flex;gap:8px;align-items:center}.or input{margin:0 0 8px}
+.ck{width:44px;height:44px;flex:none;border-radius:50%;padding:0;font-size:20px;margin-bottom:8px}
+.ck.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.sl{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}.si{display:flex;align-items:center;gap:8px;height:52px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);user-select:none;-webkit-user-select:none}.si.fx{background:var(--bg)}.si.drag{position:fixed;z-index:50;margin:0;pointer-events:none;outline:2px solid var(--ac);box-shadow:0 12px 24px rgba(0,0,0,.3);transform:scale(1.04) rotate(-1.5deg);opacity:.96}.si.ph{border:2px dashed var(--ac);background:transparent;opacity:.6}.sl .si:not(.fx){touch-action:none;cursor:grab}.hd{touch-action:none;cursor:grab;font-size:22px;padding:6px 8px 6px 0;line-height:1}.mg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lt{width:100%;border-collapse:collapse}.lt th,.lt td{padding:8px 6px;text-align:left;border-top:1px solid var(--bd)}.lt tr.me{background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.dl{width:100%;max-width:360px;margin:0}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:30;max-width:90%}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="QUIZMEL">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+</head>
+<body>
+<div id="app"><div id="sp"><div class="logo">QUIZMEL</div><div id="msg" class="mu">Cargando…</div></div></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TYPES={tf:"Verdadero / Falso",mc:"Opción múltiple",multi:"Múltiple respuesta",seq:"Secuencia",match:"Unir"};
+const ICON={tf:"✔✖",mc:"🔘",multi:"☑️",seq:"🔢",match:"🔗"};
+let db,user,uid,isHost=false,quizzes=[],answers=[],board=[],scr="splash",cur=null,qf=null,run=null,tick=null,me={name:""};
+try{me.name=localStorage.getItem("quiz-name")||""}catch(e){}
+const getQuiz=()=>quizzes.find(x=>x.id===cur);
+const unlocked=new Set();
+window.alert=m=>{const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)};
+function dlg(o){return new Promise(r=>{const w=document.createElement("div");w.className="ov";w.innerHTML=`<div class="card dl"><h2>${esc(o.title)}</h2>${o.msg?`<p class="mu">${esc(o.msg)}</p>`:""}${o.pw?'<input type="password" id="d1" autocomplete="off" placeholder="Contraseña">':""}<div class="row"><button class="p" id="dy">${o.ok||"Aceptar"}</button><button id="dn">Cancelar</button></div></div>`;document.body.appendChild(w);const f=w.querySelector("#d1");if(f)f.focus();const end=v=>{w.remove();r(v)};w.querySelector("#dy").onclick=()=>end(f?f.value:true);w.querySelector("#dn").onclick=()=>end(null)})}
+async function hash(pw,salt){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(salt+":"+pw));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function unlock(q){
+  if(!q||!q.ph||unlocked.has(q.id))return true;
+  const p=await dlg({title:"Contraseña del quiz",msg:"Este quiz está protegido. Solo su creador puede abrirlo.",pw:true,ok:"Entrar"});
+  if(p==null)return false;
+  if(await hash(p,q.salt)===q.ph){unlocked.add(q.id);return true}
+  alert("Contraseña incorrecta.");return false;
+}
+const hdr=(t,b)=>`<div class="row" style="margin-bottom:12px">${b?'<button class="sm" id="bk">← Inicio</button>':""}<h1 style="margin:0">${t}</h1></div>`;
+function go(s){scr=s;render()}
+function render(){if(scr==="home")unlocked.clear();({home:sHome,newq:sNew,edit:sEdit,lobby:sLobby,play:sPlay,result:sResult}[scr]||(()=>{}))();if(scr==="home")foot();const b=$("#bk");if(b)b.onclick=()=>{run=null;clearInterval(tick);go("home")}}
+
+async function init(){
+  const t0=Date.now();
+  if(typeof firebase==="undefined"||!window.FIREBASE_CONFIG||/PEGA/.test(FIREBASE_CONFIG.apiKey||"PEGA")){$("#msg").textContent="Falta configurar Firebase: edita el archivo config.js.";return}
+  firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();
+  const auth=firebase.auth();let begun=false,unsubs=[];
+  const er=()=>{const m=$("#msg");if(m)m.textContent="No se pudo conectar. Revisa la configuración de Firebase."};
+  auth.onAuthStateChanged(async u=>{
+    if(!u){try{await auth.signInAnonymously()}catch(e){er()}return}
+    uid=u.uid;isHost=!u.isAnonymous;answers=[];
+    unsubs.forEach(f=>f());
+    unsubs=[
+      db.collection("quizzes").orderBy("n").onSnapshot(s=>{quizzes=s.docs.map(d=>({id:d.id,...d.data()}));if(scr==="home")render();else if(scr==="edit")paintList()},er),
+      db.collection("board").onSnapshot(s=>{board=s.docs.map(d=>d.data());paintBoard()},()=>{})
+    ];
+    if(isHost)unsubs.push(db.collection("answers").onSnapshot(s=>{answers=s.docs.map(d=>({id:d.id,...d.data()}));if(scr==="edit")paintList()},()=>{}));
+    if(!begun){
+      begun=true;
+      $("#sp").onclick=()=>{if(scr==="splash")go("home")};
+      setTimeout(()=>{if(scr==="splash")go("home")},Math.max(0,1600-(Date.now()-t0)));
+    }else if(scr!=="splash")render();
+  });
+}
+function foot(){
+  const p=document.createElement("p");p.className="mu";p.style.textAlign="center";
+  p.innerHTML=isHost?'<a href="#">Cerrar sesión de creador</a>':'<a href="#">Soy el creador</a>';
+  $("#app").appendChild(p);
+  p.querySelector("a").onclick=e=>{e.preventDefault();isHost?firebase.auth().signOut():loginDlg()};
+}
+function loginDlg(){
+  const w=document.createElement("div");w.className="ov";
+  w.innerHTML='<div class="card dl"><h2>Entrar como creador</h2><input type="text" id="le" placeholder="Correo" autocomplete="username"><input type="password" id="lp" placeholder="Contraseña" autocomplete="current-password"><div class="row"><button class="p" id="ly">Entrar</button><button id="ln">Cancelar</button></div></div>';
+  document.body.appendChild(w);
+  w.querySelector("#ln").onclick=()=>w.remove();
+  w.querySelector("#ly").onclick=async()=>{try{await firebase.auth().signInWithEmailAndPassword(w.querySelector("#le").value.trim(),w.querySelector("#lp").value);w.remove()}catch(e){alert("Correo o contraseña incorrectos.")}};
+}
+
+/* ---------- INICIO ---------- */
+function sHome(){
+  const list=quizzes.filter(q=>isHost||q.published);
+  $("#app").innerHTML=`<div class="logo s">QUIZMEL</div>${isHost?'<button class="p" id="nw" style="width:100%;padding:16px;font-size:18px;margin-bottom:14px">➕ Crear nuevo quiz</button>':""}<div class="card"><h2>${isHost?"Mis quizzes":"Quizzes disponibles"}</h2>${list.map(q=>`<div class="q"><div><b>${q.ph?"🔒 ":""}${q.mode==="tournament"?"🏆 ":""}${esc(q.name)}</b><div class="mu">${(q.qs||[]).length} pregunta(s)${isHost?(q.published?" · publicado":" · borrador"):""}</div></div><div class="row">${isHost?`<button class="sm" data-e="${q.id}">Editar</button><button class="sm" data-d="${q.id}">🗑</button>`:""}${q.published?`<button class="sm p" data-p="${q.id}">Jugar</button>`:""}</div></div>`).join("")||'<p class="mu">Aún no hay quizzes disponibles.</p>'}</div>`;
+  if($("#nw"))$("#nw").onclick=()=>go("newq");
+  document.querySelectorAll("[data-e]").forEach(b=>b.onclick=async()=>{const q=quizzes.find(x=>x.id===b.dataset.e);if(!await unlock(q))return;cur=q.id;qf=null;go("edit")});
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{cur=b.dataset.p;go("lobby")});
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{const q=quizzes.find(x=>x.id===b.dataset.d);if(!await unlock(q))return;if(await dlg({title:"¿Borrar este quiz?",ok:"Borrar"}))db.doc("quizzes/"+q.id).delete()});
+}
+function sNew(){
+  $("#app").innerHTML=`${hdr("Crear nuevo quiz",1)}<div class="card"><p class="mu">Ponle un nombre a tu quiz.</p><input type="text" id="qn" maxlength="40" placeholder="Nombre del quiz"><select id="md" style="width:100%;font:inherit;padding:10px;margin-bottom:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)"><option value="normal">Quiz normal</option><option value="tournament">🏆 Torneo (tabla de posiciones)</option></select><div id="pwa"><label class="mu"><input type="checkbox" id="np"> Crear sin contraseña</label><div id="pwb" style="margin-top:8px"><p class="mu">Crea una contraseña para este quiz y repítela.</p><input type="password" id="p1" placeholder="Contraseña" autocomplete="new-password"><input type="password" id="p2" placeholder="Repite la contraseña" autocomplete="new-password"></div></div><p class="mu" id="tn" style="display:none">🏆 Los torneos son sin contraseña: la tabla de posiciones la ven todos los jugadores.</p><button class="p" id="nx">Siguiente</button></div>`;
+  $("#np").onchange=e=>{$("#pwb").style.display=e.target.checked?"none":""};
+  $("#md").onchange=e=>{const t=e.target.value==="tournament";$("#pwa").style.display=t?"none":"";$("#tn").style.display=t?"":"none"};
+  $("#nx").onclick=async()=>{
+    const name=$("#qn").value.trim();if(!name){alert("Escribe el nombre del quiz.");return}
+    const np=$("#np").checked||$("#md").value==="tournament",p1=$("#p1").value,p2=$("#p2").value;
+    if(!np){if(p1.length<4){alert("La contraseña debe tener al menos 4 caracteres.");return}if(p1!==p2){alert("Las contraseñas no coinciden.");return}}
+    const salt=Math.random().toString(36).slice(2)+Date.now().toString(36),ph=np?"":await hash(p1,salt);
+    try{const r=await db.collection("quizzes").add({name,qs:[],published:false,n:Date.now(),ph,salt,mode:$("#md").value});cur=r.id;unlocked.add(r.id);qf=null;go("edit")}catch(e){alert("No se pudo crear el quiz.")}
+  };
+}
+
+/* ---------- NUEVO QUIZ (EDITOR) ---------- */
+function sEdit(){
+  $("#app").innerHTML=`${hdr("Nuevo Quiz",1)}<p class="mu" id="qnm"></p><div class="card"><h2>Tipo de pregunta</h2><div class="grid">${Object.entries(TYPES).map(([k,v])=>`<button class="tb" data-t="${k}">${ICON[k]}<br>${v}</button>`).join("")}</div></div><div id="qf"></div><div id="ql"></div>`;
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=b.dataset.t;qf={idx:null,t,text:"",options:t==="tf"?["Verdadero","Falso"]:["","","",""],correct:t==="multi"?[]:0,secs:20,pts:10,...(t==="match"?{right:["","","",""]}:{})};showForm();$("#qf").scrollIntoView({behavior:"smooth"})});
+  showForm();paintList();
+}
+function formSync(){if(!$("#qt"))return;qf.text=$("#qt").value;qf.secs=+$("#sc").value||20;qf.pts=+$("#pt").value||10;if(qf.t!=="tf")qf.options=[...document.querySelectorAll(".oi")].map(i=>i.value);if(qf.t==="match")qf.right=[...document.querySelectorAll(".ri")].map(i=>i.value)}
+function showForm(){
+  const el=$("#qf");if(!qf){el.innerHTML="";return}
+  const rows=qf.options.map((o,i)=>{
+    const on=qf.t==="multi"?qf.correct.includes(i):qf.correct===i;
+    const mark=qf.t==="seq"||qf.t==="match"?`<span class="ck mu" style="display:flex;align-items:center;justify-content:center">${i+1}</span>`:`<button class="ck ${on?"on":""}" data-k="${i}">${qf.t==="multi"?(on?"☑":"☐"):(on?"✔":"○")}</button>`;
+    return`<div class="or">${mark}<input type="text" class="oi" ${qf.t==="tf"?"readonly":""} placeholder="${qf.t==="seq"?"Elemento "+(i+1):qf.t==="match"?"Casilla "+(i+1):"Opción "+(i+1)}" value="${esc(o)}">${qf.t==="match"?`<input type="text" class="ri" placeholder="Su pareja" value="${esc((qf.right||[])[i]||"")}">`:""}</div>`}).join("");
+  const hint={tf:"Toca el círculo de la respuesta correcta.",mc:"Toca el círculo de la única respuesta correcta.",multi:"Toca los cuadros de TODAS las respuestas correctas.",seq:"Escribe los elementos en el orden CORRECTO; al jugador le aparecerán mezclados.",match:"Escribe cada casilla y su pareja en la misma fila. Al jugador le aparecerán las parejas mezcladas."}[qf.t];
+  el.innerHTML=`<div class="card"><h2>${qf.idx==null?"Nueva":"Editar"}: ${TYPES[qf.t]}</h2><input type="text" id="qt" placeholder="Escribe la pregunta" value="${esc(qf.text)}"><label class="mu">Cronómetro: <input type="number" id="sc" min="5" max="300" value="${qf.secs}" style="width:80px"> segundos</label> <label class="mu">Puntos: <input type="number" id="pt" min="1" max="1000" value="${qf.pts||10}" style="width:80px"></label><div style="height:10px"></div>${rows}<p class="mu">${hint}</p><div class="row"><button class="p" id="sv">Guardar pregunta</button><button id="cn">Cancelar</button></div></div>`;
+  document.querySelectorAll(".ck[data-k]").forEach(b=>b.onclick=()=>{formSync();const k=+b.dataset.k;if(qf.t==="multi")qf.correct=qf.correct.includes(k)?qf.correct.filter(x=>x!==k):[...qf.correct,k];else qf.correct=k;showForm()});
+  $("#cn").onclick=()=>{qf=null;showForm()};
+  $("#sv").onclick=async()=>{
+    formSync();const text=qf.text.trim(),options=qf.options.map(x=>x.trim());
+    if(!text||options.some(x=>!x)){alert("Completa la pregunta y todas las opciones.");return}
+    if(qf.t==="multi"&&!qf.correct.length){alert("Marca al menos una respuesta correcta.");return}
+    if(qf.t==="match"&&(qf.right||[]).some(x=>!x.trim())){alert("Completa todas las parejas.");return}
+    const d={t:qf.t,text,options,correct:qf.t==="seq"||qf.t==="match"?-1:qf.correct,...(qf.t==="match"?{right:(qf.right||[]).map(x=>x.trim())}:{}),secs:Math.min(300,Math.max(5,qf.secs)),pts:Math.min(1000,Math.max(1,Math.round(qf.pts||10)))},arr=[...(getQuiz()||{qs:[]}).qs];
+    if(qf.idx==null)arr.push(d);else arr[qf.idx]=d;
+    try{await db.doc("quizzes/"+cur).update({qs:arr})}catch(e){alert("No se pudo guardar.");return}
+    qf=null;showForm();
+  };
+}
+function paintList(){
+  const q=getQuiz()||{name:"",qs:[]},qs=q.qs||[],nm=$("#qnm"),el=$("#ql");
+  if(nm)nm.textContent="Quiz: "+q.name+(q.mode==="tournament"?" · 🏆 Torneo":"");if(!el)return;
+  const rs=answers.filter(a=>a.r&&a.r[cur]).map(a=>a.r[cur]).sort((x,y)=>y.score-x.score);
+  el.innerHTML=`<div class="card"><h2>Preguntas (${qs.length}) · ${qs.reduce((s,x)=>s+(x.pts||10),0)} puntos</h2>${qs.map((x,i)=>`<div class="q"><div>${i+1}. ${esc(x.text)}<div class="mu">${TYPES[x.t]} · ${x.secs} s · ${x.pts||10} pts</div></div><div class="row"><button class="sm" data-e="${i}">Editar</button><button class="sm" data-d="${i}">🗑</button></div></div>`).join("")||'<p class="mu">Elige un tipo de pregunta arriba para empezar.</p>'}<br>${q.published?'<button class="p" id="lb">Ir a la pantalla de inicio del quiz</button> <button id="up">Despublicar</button>':`<button class="p" id="pb" ${qs.length?"":"disabled"}>Publicar</button>`}</div>${rs.length?`<div class="card"><h2>Resultados</h2>${rs.map(r=>`<div class="q"><span>${esc(r.name)}</span><b>${r.score} / ${r.total} pts</b></div>`).join("")}</div>`:""}`;
+  document.querySelectorAll("#ql [data-e]").forEach(b=>b.onclick=()=>{qf={...JSON.parse(JSON.stringify(qs[+b.dataset.e])),idx:+b.dataset.e};showForm();$("#qf").scrollIntoView({behavior:"smooth"})});
+  document.querySelectorAll("#ql [data-d]").forEach(b=>b.onclick=async()=>{if(await dlg({title:"¿Borrar esta pregunta?",ok:"Borrar"}))db.doc("quizzes/"+cur).update({qs:qs.filter((_,i)=>i!==+b.dataset.d)})});
+  if($("#pb"))$("#pb").onclick=async()=>{await db.doc("quizzes/"+cur).update({published:true});go("lobby")};
+  if($("#lb"))$("#lb").onclick=()=>go("lobby");
+  if($("#up"))$("#up").onclick=()=>db.doc("quizzes/"+cur).update({published:false});
+}
+
+/* ---------- JUGAR ---------- */
+function sLobby(){
+  const q=getQuiz();if(!q){go("home");return}
+  $("#app").innerHTML=`${hdr(esc(q.name),1)}<div class="card"><p class="mu">${q.mode==="tournament"?"🏆 Torneo · ":""}${q.qs.length} pregunta(s) · ${q.qs.reduce((s,x)=>s+(x.pts||10),0)} puntos en total.</p><input type="text" id="nm" maxlength="20" placeholder="Escribe tu nombre" value="${esc(me.name)}"><button class="p" id="st" ${me.name?"":"disabled"}>Iniciar</button>${isHost?'<p class="mu">Comparte el enlace de la app: los jugadores verán este quiz en la lista.</p>':""}</div><div id="lbt"></div>`;
+  paintBoard();
+  $("#nm").oninput=e=>{me.name=e.target.value.trim();try{localStorage.setItem("quiz-name",me.name)}catch(x){}$("#st").disabled=!me.name};
+  $("#st").onclick=()=>{
+    if(!me.name)return;
+    const qs=q.qs;
+    run={q:{id:q.id,name:q.name,prot:!!q.ph,ph:q.ph,salt:q.salt,mode:q.mode},qs,i:0,max:0,ans:[],ends:[],locked:[],perm:qs.map(x=>shuf(x.options.length)),t0:Date.now(),done:false};
+    visit(0);
+  };
+}
+function visit(i){
+  run.i=i;run.max=Math.max(run.max,i);
+  if(run.ends[i]==null)run.ends[i]=Date.now()+(run.qs[i].secs||20)*1000;
+  if((run.qs[i].t==="seq"||run.qs[i].t==="match")&&!run.ans[i])run.ans[i]=[...run.perm[i]];
+  clearInterval(tick);
+  tick=setInterval(()=>{
+    const j=run.i,l=Math.max(0,Math.ceil((run.ends[j]-Date.now())/1000)),e=$(".tm");
+    if(e)e.textContent="⏱ "+l+" s";
+    if(l<=0&&!run.locked[j]){run.locked[j]=true;clearInterval(tick);render();if(j===run.max)setTimeout(()=>{if(run.i===j&&!run.done)nextQ()},800)}
+  },250);
+  go("play");
+}
+const nextQ=()=>run.i+1>=run.qs.length?finish():visit(run.i+1);
+function sPlay(){
+  const i=run.i,q=run.qs[i],n=run.qs.length,a=run.ans[i],lk=run.locked[i]||Date.now()>=run.ends[i];
+  let body;
+  if(q.t==="seq"||q.t==="match"){
+    const ord=Array.isArray(a)?a:run.perm[i];
+    body=seqBody(q,ord,lk);
+  }else body=q.options.map((o,k)=>{const sel=q.t==="multi"?(Array.isArray(a)&&a.includes(k)):a===k;return`<button class="opt ${sel?"sel":""}" data-o="${k}" ${lk?"disabled":""}>${q.t==="multi"?(sel?"☑ ":"☐ "):""}${esc(o)}</button>`}).join("");
+  const hint={tf:"",mc:"",multi:"Marca todas las respuestas correctas.",seq:"Mantén presionada una casilla y arrástrala al lugar que quieras. Puedes moverla las veces que quieras.",match:"Mantén presionada una casilla de la derecha y arrástrala hasta dejarla junto a su pareja."}[q.t];
+  const l=Math.max(0,Math.ceil((run.ends[i]-Date.now())/1000));
+  $("#app").innerHTML=`<div class="mu">${esc(run.q.name)} · Pregunta ${i+1} de ${n} · ${q.pts||10} pts</div><div class="card"><div class="tm big">⏱ ${l} s</div><div class="big">${esc(q.text)}</div>${hint?`<p class="mu">${hint}</p>`:""}${body}${lk?'<p class="mu">⏰ Tiempo agotado.</p>':""}</div><div class="row" style="justify-content:space-between">${i>0?'<button id="pv">← Atrás</button>':"<span></span>"}<button class="p" id="nx">${i+1>=n?"Finalizar":"Siguiente →"}</button></div>`;
+  document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{const k=+b.dataset.o;if(q.t==="multi"){const c=Array.isArray(run.ans[i])?run.ans[i]:[];run.ans[i]=c.includes(k)?c.filter(x=>x!==k):[...c,k]}else run.ans[i]=k;render()});
+  if($("#sl")&&!lk)sortable($("#sl"),o=>{run.ans[i]=[...o]});
+  
+  if($("#pv"))$("#pv").onclick=()=>visit(i-1);
+  $("#nx").onclick=nextQ;
+}
+function paintBoard(){
+  const el=$("#lbt");if(!el)return;
+  const id=(scr==="result"&&run)?run.q.id:cur,q=quizzes.find(x=>x.id===id);
+  if(!q||q.mode!=="tournament"||(scr==="lobby"&&q.ph)){el.innerHTML="";return}
+  const rows=board.map(d=>d.r&&d.r[id]).filter(Boolean).sort((a,b)=>b.score-a.score||a.ms-b.ms);
+  const fmt=ms=>{const s=Math.round((ms||0)/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+  el.innerHTML=`<div class="card"><h2>🏆 Tabla de posiciones</h2>${rows.length?`<table class="lt"><tr><th>#</th><th>Jugador</th><th>Puntos</th><th>Tiempo</th></tr>${rows.map((r,i)=>`<tr class="${r.uid===uid?"me":""}"><td>${["🥇","🥈","🥉"][i]||i+1}</td><td>${esc(r.name)}</td><td><b>${r.score}</b></td><td>${fmt(r.ms)}</td></tr>`).join("")}</table>`:'<p class="mu">Aún nadie ha terminado el torneo.</p>'}</div>`;
+}
+function shuf(n){let p;do{p=Array.from({length:n},(_,k)=>k).sort(()=>Math.random()-.5)}while(n>1&&p.every((v,k)=>v===k));return p}
+function seqBody(q,ord,lk){
+  const tile=k=>`<div class="si" data-k="${k}">${lk?"":'<span class="hd">⠿</span>'}<span>${esc(q.t==="match"?q.right[k]:q.options[k])}</span></div>`;
+  const rt=`<div class="sl" id="sl">${ord.map(tile).join("")}</div>`;
+  return q.t==="match"?`<div class="mg"><div class="sl">${q.options.map(o=>`<div class="si fx"><span>${esc(o)}</span></div>`).join("")}</div>${rt}</div>`:rt;
+}
+function sortable(cont,done){
+  const its=[...cont.querySelectorAll(".si")];let dk=-1,ph=null,busy=false;
+  const at=k=>k===dk&&ph?ph:its.find(x=>+x.dataset.k===k);
+  let ord=its.map(x=>+x.dataset.k);
+  const ap=()=>{
+    const all=ph?[...its,ph]:its,b=new Map(all.map(x=>[x,x.getBoundingClientRect().top]));
+    ord.forEach((k,p)=>{at(k).style.order=p});
+    all.forEach(x=>{const d=b.get(x)-x.getBoundingClientRect().top;if(d&&x!==ph&&!x.classList.contains("drag")){x.style.transition="none";x.style.transform=`translateY(${d}px)`;x.getBoundingClientRect();x.style.transition="transform .18s";x.style.transform=""}});
+  };
+  ap();
+  its.forEach(it=>it.onpointerdown=e=>{
+    if(busy)return;e.preventDefault();busy=true;
+    const k0=+it.dataset.k,o0=[...ord],r=it.getBoundingClientRect(),x0=e.clientX,y0=e.clientY;let lx=x0,ly=y0;
+    ph=document.createElement("div");ph.className="si ph";dk=k0;ph.style.order=it.style.order;cont.appendChild(ph);
+    it.classList.add("drag");Object.assign(it.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px",transition:"none",transform:""});
+    try{navigator.vibrate&&navigator.vibrate(12)}catch(z){}
+    const mv=ev=>{
+      lx=ev.clientX;ly=ev.clientY;
+      it.style.left=(r.left+lx-x0)+"px";it.style.top=(r.top+ly-y0)+"px";
+      const ot=ord.filter(k=>k!==k0).map(at);let idx=ot.length;
+      for(let j=0;j<ot.length;j++){const q=ot[j].getBoundingClientRect();if(ly<q.top+q.height/2){idx=j;break}}
+      const n=ot.map(x=>+x.dataset.k);n.splice(idx,0,k0);
+      if(n.join()!==ord.join()){ord=n;ap()}
+    };
+    const up=()=>{
+      removeEventListener("pointermove",mv);removeEventListener("pointerup",up);removeEventListener("pointercancel",up);
+      const c=cont.getBoundingClientRect();
+      if(lx<c.left-70||lx>c.right+70||ly<c.top-70||ly>c.bottom+70){ord=o0;ap()}
+      const p=ph.getBoundingClientRect();
+      it.style.transition="left .18s,top .18s,transform .18s";it.style.left=p.left+"px";it.style.top=p.top+"px";it.style.transform="none";
+      done(ord);
+      setTimeout(()=>{it.classList.remove("drag");it.style.cssText="";it.style.order=ph.style.order;ph.remove();ph=null;dk=-1;busy=false},200);
+    };
+    addEventListener("pointermove",mv);addEventListener("pointerup",up);addEventListener("pointercancel",up);
+  });
+}
+const sameSet=(x,y)=>x.length===y.length&&[...x].sort().every((v,k)=>v===[...y].sort()[k]);
+function ok(q,a){
+  if(a==null)return false;
+  if(q.t==="multi")return Array.isArray(a)&&sameSet(a,q.correct);
+  if(q.t==="seq"||q.t==="match")return Array.isArray(a)&&a.length===q.options.length&&a.every((v,k)=>v===k);
+  return a===q.correct;
+}
+function ansTxt(q,a){
+  if(a==null||(Array.isArray(a)&&!a.length))return"sin respuesta";
+  return q.t==="multi"?a.map(k=>q.options[k]).join(", "):q.t==="seq"?a.map(k=>q.options[k]).join(" → "):q.t==="match"?a.map((r,j)=>q.options[j]+" ↔ "+q.right[r]).join("; "):q.options[a];
+}
+function corrTxt(q){return q.t==="multi"?q.correct.map(k=>q.options[k]).join(", "):q.t==="seq"?q.options.join(" → "):q.t==="match"?q.options.map((o,j)=>o+" ↔ "+q.right[j]).join("; "):q.options[q.correct]}
+async function finish(){
+  clearInterval(tick);run.done=true;
+  run.score=run.qs.reduce((s,q,i)=>s+(ok(q,run.ans[i])?(q.pts||10):0),0);run.total=run.qs.reduce((s,q)=>s+(q.pts||10),0);run.ms=Date.now()-run.t0;
+  go("result");
+  if(!isHost){
+    try{const d=await db.doc("answers/"+uid).get(),r=d.exists?(d.data().r||{}):{};r[run.q.id]={uid,name:me.name,score:run.score,total:run.total,ms:run.ms,t:Date.now()};await db.doc("answers/"+uid).set({r});if(run.q.mode==="tournament"){const bd=await db.doc("board/"+uid).get(),br=bd.exists?(bd.data().r||{}):{},o=br[run.q.id],n=r[run.q.id];if(!o||n.score>o.score||(n.score===o.score&&n.ms<o.ms))br[run.q.id]=n;await db.doc("board/"+uid).set({r:br})}}catch(e){alert("No se pudo guardar tu resultado.")}
+  }
+}
+function sResult(){
+  if(run.q.prot&&!run.seeRes){$("#app").innerHTML=`${hdr("🏁 Quiz finalizado")}<div class="card"><div class="big">Ingresa la contraseña para ver los resultados</div><input type="password" id="rp1" placeholder="Contraseña" autocomplete="off"><div class="row"><button class="p" id="rv">Ver resultados</button><button id="hm">Volver al inicio</button></div></div>`;$("#hm").onclick=()=>{run=null;go("home")};$("#rv").onclick=async()=>{if(await hash($("#rp1").value,run.q.salt)===run.q.ph){run.seeRes=true;render()}else alert("Contraseña incorrecta.")};return}
+  const t=run.qs.length;
+  $("#app").innerHTML=`${hdr("🏁 Resultados")}<div class="card"><div class="mu">${esc(run.q.name)} · ${esc(me.name)}</div><div class="big">⭐ ${run.score} de ${run.total} puntos</div>${run.qs.map((q,i)=>{const g=ok(q,run.ans[i]);return`<div class="q"><div>${i+1}. ${esc(q.text)}<div class="mu">${g?"✅":"❌"} Tu respuesta: ${esc(ansTxt(q,run.ans[i]))}${g?" · +"+(q.pts||10)+" pts":" · 0 pts"}${g?"":" · Correcta: "+esc(corrTxt(q))}</div></div></div>`}).join("")}</div><div id="lbt"></div><div class="row"><button class="p" id="hm">Volver al inicio</button><button id="rp">Repetir</button></div>`;
+  $("#hm").onclick=()=>{run=null;go("home")};
+  $("#rp").onclick=()=>go("lobby");paintBoard();
+}
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+init();
+</script>
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+</body>
+</html>
