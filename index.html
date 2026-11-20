@@ -131,7 +131,7 @@ function sNew(){
     const np=$("#np").checked||$("#md").value==="tournament",p1=$("#p1").value,p2=$("#p2").value;
     if(!np){if(p1.length<4){alert("La contraseña debe tener al menos 4 caracteres.");return}if(p1!==p2){alert("Las contraseñas no coinciden.");return}}
     const salt=Math.random().toString(36).slice(2)+Date.now().toString(36),ph=np?"":await hash(p1,salt);
-    try{const r=await db.collection("quizzes").add({name,qs:[],published:false,n:Date.now(),ph,salt,mode:$("#md").value});cur=r.id;unlocked.add(r.id);qf=null;go("edit")}catch(e){alert("No se pudo crear el quiz.")}
+    try{const r=await db.collection("quizzes").add({name,qs:[],published:false,n:Date.now(),ph,salt,mode:$("#md").value});cur=r.id;unlocked.add(r.id);qf=null;go("edit")}catch(e){alert("No se pudo crear el quiz: "+(e.code||e.message))}
   };
 }
 
@@ -159,7 +159,7 @@ function showForm(){
     if(qf.t==="match"&&(qf.right||[]).some(x=>!x.trim())){alert("Completa todas las parejas.");return}
     const d={t:qf.t,text,options,correct:qf.t==="seq"||qf.t==="match"?-1:qf.correct,...(qf.t==="match"?{right:(qf.right||[]).map(x=>x.trim())}:{}),secs:Math.min(300,Math.max(5,qf.secs)),pts:Math.min(1000,Math.max(1,Math.round(qf.pts||10)))},arr=[...(getQuiz()||{qs:[]}).qs];
     if(qf.idx==null)arr.push(d);else arr[qf.idx]=d;
-    try{await db.doc("quizzes/"+cur).update({qs:arr})}catch(e){alert("No se pudo guardar.");return}
+    try{await db.doc("quizzes/"+cur).update({qs:arr})}catch(e){alert("No se pudo guardar: "+(e.code||e.message));return}
     qf=null;showForm();
   };
 }
@@ -284,7 +284,7 @@ async function finish(){
   run.score=run.qs.reduce((s,q,i)=>s+(ok(q,run.ans[i])?(q.pts||10):0),0);run.total=run.qs.reduce((s,q)=>s+(q.pts||10),0);run.ms=Date.now()-run.t0;
   go("result");
   if(!isHost){
-    try{const d=await db.doc("answers/"+uid).get(),r=d.exists?(d.data().r||{}):{};r[run.q.id]={uid,name:me.name,score:run.score,total:run.total,ms:run.ms,t:Date.now()};await db.doc("answers/"+uid).set({r});if(run.q.mode==="tournament"){const bd=await db.doc("board/"+uid).get(),br=bd.exists?(bd.data().r||{}):{},o=br[run.q.id],n=r[run.q.id];if(!o||n.score>o.score||(n.score===o.score&&n.ms<o.ms))br[run.q.id]=n;await db.doc("board/"+uid).set({r:br})}}catch(e){alert("No se pudo guardar tu resultado.")}
+    try{const d=await db.doc("answers/"+uid).get(),r=d.exists?(d.data().r||{}):{};r[run.q.id]={uid,name:me.name,score:run.score,total:run.total,ms:run.ms,t:Date.now()};await db.doc("answers/"+uid).set({r});if(run.q.mode==="tournament"){const bd=await db.doc("board/"+uid).get(),br=bd.exists?(bd.data().r||{}):{},o=br[run.q.id],n=r[run.q.id];if(!o||n.score>o.score||(n.score===o.score&&n.ms<o.ms))br[run.q.id]=n;await db.doc("board/"+uid).set({r:br})}}catch(e){alert("No se pudo guardar tu resultado: "+(e.code||e.message))}
   }
 }
 function sResult(){
